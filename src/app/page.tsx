@@ -107,10 +107,15 @@ export default function HomePage() {
   const [error, setError]   = useState("");
   const [success, setSuccess] = useState(false);
 
-  // Foto dokumentasi
-  const [imgDok, setImgDok]         = useState<File | null>(null);
-  const [prevDok, setPrevDok]       = useState("");
-  const refDok                      = useRef<HTMLInputElement | null>(null);
+  // Foto dokumentasi (1 – 3 foto)
+  const MAX_DOK = 3;
+  const [imgsDok, setImgsDok]   = useState<(File | null)[]>([null, null, null]);
+  const [prevsDok, setPrevsDok] = useState<string[]>(["" , "", ""]);
+  const refsDok = [
+    useRef<HTMLInputElement | null>(null),
+    useRef<HTMLInputElement | null>(null),
+    useRef<HTMLInputElement | null>(null),
+  ];
 
   // TTD Mahasiswa
   const [imgTtdMhs, setImgTtdMhs]   = useState<File | null>(null);
@@ -147,6 +152,29 @@ export default function HomePage() {
     }, []
   );
 
+  // Indexed handler for dokumentasi slots
+  const handleDokChange = useCallback(
+    (idx: number) => (e: ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      if (!file.type.startsWith("image/")) { setError("File harus berupa gambar."); return; }
+      if (file.size > 10 * 1024 * 1024)  { setError("Ukuran gambar maks 10 MB."); return; }
+      setImgsDok(prev => { const n = [...prev]; n[idx] = file; return n; });
+      const reader = new FileReader();
+      reader.onload = (ev) => setPrevsDok(prev => { const n = [...prev]; n[idx] = ev.target?.result as string; return n; });
+      reader.readAsDataURL(file);
+      setError(""); setSuccess(false);
+    }, []
+  );
+
+  const handleDokRemove = useCallback(
+    (idx: number) => () => {
+      setImgsDok(prev => { const n = [...prev]; n[idx] = null; return n; });
+      setPrevsDok(prev => { const n = [...prev]; n[idx] = ""; return n; });
+      if (refsDok[idx].current) refsDok[idx].current!.value = "";
+    }, []
+  );
+
   const makeRemoveHandler = useCallback(
     (
       setFile: (f: null) => void,
@@ -167,7 +195,8 @@ export default function HomePage() {
       if (!hariKe || !hari || !tanggal || !jamMasuk || !jamPulang || !kegiatan) {
         setError("Semua field teks wajib diisi."); return;
       }
-      if (!imgDok)    { setError("Foto dokumentasi wajib diupload."); return; }
+      const filledDok = imgsDok.filter(Boolean) as File[];
+      if (filledDok.length === 0) { setError("Minimal 1 foto dokumentasi wajib diupload."); return; }
       if (!imgTtdMhs) { setError("TTD mahasiswa wajib diupload."); return; }
       if (!imgTtdIns) { setError("TTD instansi wajib diupload."); return; }
 
@@ -180,9 +209,10 @@ export default function HomePage() {
         fd.append("jamMasuk",  jamMasuk);
         fd.append("jamPulang", jamPulang);
         fd.append("kegiatan",  kegiatan);
-        fd.append("dokumentasi",  imgDok);
-        fd.append("ttdMahasiswa", imgTtdMhs);
-        fd.append("ttdInstansi",  imgTtdIns);
+        const filledDok2 = imgsDok.filter(Boolean) as File[];
+        filledDok2.forEach((f, i) => fd.append(`dokumentasi_${i}`, f));
+        fd.append("ttdMahasiswa", imgTtdMhs!);
+        fd.append("ttdInstansi",  imgTtdIns!);
 
         const res = await fetch("/api/generate-pdf", { method: "POST", body: fd });
         if (!res.ok) {
@@ -203,17 +233,18 @@ export default function HomePage() {
         setSuccess(true);
         setForm(INITIAL);
         // Reset images
-        setImgDok(null); setPrevDok("");
+        setImgsDok([null, null, null]); setPrevsDok(["", "", ""]);
+        refsDok.forEach(r => { if (r.current) r.current.value = ""; });
         setImgTtdMhs(null); setPrevTtdMhs("");
         setImgTtdIns(null); setPrevTtdIns("");
-        [refDok, refTtdMhs, refTtdIns].forEach(r => { if (r.current) r.current.value = ""; });
+        [refTtdMhs, refTtdIns].forEach(r => { if (r.current) r.current.value = ""; });
       } catch (err: unknown) {
         setError(err instanceof Error ? err.message : "Terjadi kesalahan.");
       } finally {
         setLoading(false);
       }
     },
-    [form, imgDok, imgTtdMhs, imgTtdIns]
+    [form, imgsDok, imgTtdMhs, imgTtdIns]
   );
 
   const inputCls =
@@ -299,18 +330,35 @@ export default function HomePage() {
             <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-3">Upload Gambar</p>
           </div>
 
-          {/* ── Foto Dokumentasi ── */}
-          <ImageField
-            id="dokumentasi"
-            label="📷 Foto Dokumentasi"
-            icon="📷"
-            hint="Upload foto dari galeri"
-            preview={prevDok}
-            file={imgDok}
-            onChange={makeImageHandler(setImgDok, setPrevDok)}
-            onRemove={makeRemoveHandler(setImgDok, setPrevDok, refDok)}
-            inputRef={refDok}
-          />
+          {/* ── Foto Dokumentasi (multi, max 3) ── */}
+          <div className="space-y-3">
+            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+              📷 Foto Dokumentasi
+              <span className="ml-2 text-blue-400 normal-case font-normal">
+                ({imgsDok.filter(Boolean).length}/{MAX_DOK} foto)
+              </span>
+            </p>
+
+            {Array.from({ length: MAX_DOK }).map((_, idx) => {
+              // Only show slot if it's slot 0, or the previous slot is filled
+              const visible = idx === 0 || imgsDok[idx - 1] !== null;
+              if (!visible) return null;
+              return (
+                <ImageField
+                  key={idx}
+                  id={`dokumentasi_${idx}`}
+                  label={`Foto ${idx + 1}${idx === 0 ? " (wajib)" : " (opsional)"}`}
+                  icon="📷"
+                  hint={idx === 0 ? "Upload foto dokumentasi" : "Tambah foto dokumentasi"}
+                  preview={prevsDok[idx]}
+                  file={imgsDok[idx]}
+                  onChange={handleDokChange(idx)}
+                  onRemove={handleDokRemove(idx)}
+                  inputRef={refsDok[idx]}
+                />
+              );
+            })}
+          </div>
 
           {/* ── TTD Mahasiswa ── */}
           <ImageField

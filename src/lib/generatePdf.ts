@@ -117,10 +117,23 @@ export function buildLogbookHtml(data: LogbookData): string {
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 10px;
     padding: 12px;
     border-top: 1.5px solid #000;
+    flex-wrap: wrap;
   }
-  .doc-body img { max-width:260px; max-height:210px; object-fit:contain; }
+  .doc-body img {
+    max-height: 200px;
+    object-fit: contain;
+    flex: 1 1 0;
+    min-width: 0;
+  }
+  /* Single photo — keep it bigger */
+  .doc-body.single img { max-width: 260px; }
+  /* Two photos */
+  .doc-body.double img { max-width: 46%; }
+  /* Three photos */
+  .doc-body.triple img { max-width: 30%; }
 
   /* ── Pengesahan ── */
   .pengesahan { border-top: 1.5px solid #000; }
@@ -204,8 +217,8 @@ export function buildLogbookHtml(data: LogbookData): string {
     <!-- B. Dokumentasi -->
     <div class="section">
       <div class="section-label">B. Dokumentasi</div>
-      <div class="doc-body">
-        <img src="${data.dokumentasiBase64}" alt="Foto Dokumentasi"/>
+      <div class="doc-body ${data.dokumentasiBase64.length === 1 ? 'single' : data.dokumentasiBase64.length === 2 ? 'double' : 'triple'}">
+        ${data.dokumentasiBase64.map((src, i) => `<img src="${src}" alt="Foto Dokumentasi ${i + 1}"/>`).join('')}
       </div>
     </div>
 

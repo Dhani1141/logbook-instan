@@ -5,8 +5,8 @@ export interface LogbookData {
   jamMasuk: string;    // format HH:mm
   jamPulang: string;   // format HH:mm
   kegiatan: string;
-  dokumentasiBase64: string;   // foto kegiatan — full data URI
-  ttdMahasiswaBase64: string;  // TTD mahasiswa — full data URI
-  ttdInstansiBase64: string;   // TTD pembimbing lapangan — full data URI
+  dokumentasiBase64: string[];  // foto kegiatan — array of full data URIs (1–3 photos)
+  ttdMahasiswaBase64: string;   // TTD mahasiswa — full data URI
+  ttdInstansiBase64: string;    // TTD pembimbing lapangan — full data URI
   mimeType: string;
 }

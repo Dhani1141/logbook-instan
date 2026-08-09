@@ -32,31 +32,36 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // ── Ambil & validasi 3 file gambar ──
-    const fileDok    = formData.get("dokumentasi")  as File | null;
+    // ── Ambil & validasi file gambar dokumentasi (1–3 foto) ──
+    const dokFiles: File[] = [];
+    for (let i = 0; i < 3; i++) {
+      const f = formData.get(`dokumentasi_${i}`) as File | null;
+      if (f && f.size > 0) dokFiles.push(f);
+    }
+    if (dokFiles.length === 0)
+      return NextResponse.json({ error: "Minimal 1 foto dokumentasi wajib diupload." }, { status: 400 });
+
     const fileTtdMhs = formData.get("ttdMahasiswa") as File | null;
     const fileTtdIns = formData.get("ttdInstansi")  as File | null;
 
-    if (!fileDok || fileDok.size === 0)
-      return NextResponse.json({ error: "Foto dokumentasi wajib diupload." }, { status: 400 });
     if (!fileTtdMhs || fileTtdMhs.size === 0)
       return NextResponse.json({ error: "TTD mahasiswa wajib diupload." }, { status: 400 });
     if (!fileTtdIns || fileTtdIns.size === 0)
       return NextResponse.json({ error: "TTD instansi wajib diupload." }, { status: 400 });
 
     // ── Konversi ke base64 secara paralel ──
-    const [dokumentasiBase64, ttdMahasiswaBase64, ttdInstansiBase64] = await Promise.all([
-      fileToBase64DataUri(fileDok),
+    const [dokumentasiBase64Array, ttdMahasiswaBase64, ttdInstansiBase64] = await Promise.all([
+      Promise.all(dokFiles.map(fileToBase64DataUri)),
       fileToBase64DataUri(fileTtdMhs),
       fileToBase64DataUri(fileTtdIns),
     ]);
 
     const logbookData: LogbookData = {
       hariKe, hari, tanggal, jamMasuk, jamPulang, kegiatan,
-      dokumentasiBase64,
+      dokumentasiBase64: dokumentasiBase64Array,
       ttdMahasiswaBase64,
       ttdInstansiBase64,
-      mimeType: fileDok.type || "image/jpeg",
+      mimeType: dokFiles[0].type || "image/jpeg",
     };
 
     // ── Build HTML template ──
