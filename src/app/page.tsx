@@ -304,8 +304,7 @@ export default function HomePage() {
             id="dokumentasi"
             label="📷 Foto Dokumentasi"
             icon="📷"
-            hint="Ketuk untuk ambil foto / pilih dari galeri"
-            capture="environment"
+            hint="Upload foto dari galeri"
             preview={prevDok}
             file={imgDok}
             onChange={makeImageHandler(setImgDok, setPrevDok)}
