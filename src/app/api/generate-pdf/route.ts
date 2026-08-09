@@ -65,13 +65,15 @@ export async function POST(req: NextRequest) {
     // ── Launch Puppeteer (dev vs production) ──
     let browser;
     if (process.env.NODE_ENV === "production") {
-      // Vercel serverless — gunakan @sparticuz/chromium
-      const chromium = (await import("@sparticuz/chromium")).default;
+      // Vercel serverless — gunakan @sparticuz/chromium-min
+      const chromium = (await import("@sparticuz/chromium-min")).default;
       const puppeteer = await import("puppeteer-core");
       browser = await puppeteer.default.launch({
         args: chromium.args,
         defaultViewport: null,
-        executablePath: await chromium.executablePath(),
+        executablePath: await chromium.executablePath(
+          "https://github.com/Sparticuz/chromium/releases/download/v131.0.1/chromium-v131.0.1-pack.tar"
+        ),
         headless: true,
       });
     } else {

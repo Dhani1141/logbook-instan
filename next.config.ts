@@ -12,7 +12,7 @@ const nextConfig: NextConfig = {
   // puppeteer/chromium are server-only and excluded from bundling via serverExternalPackages.
   turbopack: {},
 
-  serverExternalPackages: ["puppeteer", "puppeteer-core", "@sparticuz/chromium"],
+  serverExternalPackages: ["puppeteer", "puppeteer-core", "@sparticuz/chromium-min"],
 };
 
 export default nextConfig;
