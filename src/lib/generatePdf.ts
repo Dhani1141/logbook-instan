@@ -1,6 +1,5 @@
-import fs from "fs";
-import path from "path";
 import { LogbookData } from "@/types/logbook";
+import { logoUmktBase64 } from "@/lib/logo";
 
 function formatTanggal(dateStr: string): string {
   const months = [
@@ -11,20 +10,9 @@ function formatTanggal(dateStr: string): string {
   return `${parseInt(day)} ${months[parseInt(month) - 1]} ${year}`;
 }
 
-function imageToBase64(filename: string): string {
-  const abs = path.join(process.cwd(), "public", filename);
-  const buffer = fs.readFileSync(abs);
-  const ext = path.extname(filename).slice(1).toLowerCase();
-  const mime =
-    ext === "jpg" || ext === "jpeg" ? "image/jpeg"
-    : ext === "png" ? "image/png"
-    : `image/${ext}`;
-  return `data:${mime};base64,${buffer.toString("base64")}`;
-}
-
 export function buildLogbookHtml(data: LogbookData): string {
-  // Logo baca dari public/ — gambar asli UMKT (PNG dari user)
-  const logoBase64 = imageToBase64("logo-umkt.png");
+  // Logo langsung diambil dari variabel base64 (menghindari error fs.readFileSync di Vercel)
+  const logoBase64 = logoUmktBase64;
 
   // TTD datang dari upload form sebagai base64 data URI
   const ttdMahasiswaBase64 = data.ttdMahasiswaBase64;
