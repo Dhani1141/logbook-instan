@@ -162,7 +162,7 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
         if (!shell) return;
         this.setTarget(shell.clientWidth / 2, shell.clientHeight / 2);
       },
-      beginInitial(durationMs) {
+      beginInitial(durationMs: number) {
         initialUntil = performance.now() + durationMs;
         start();
       },
