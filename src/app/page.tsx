@@ -315,13 +315,14 @@ export default function Home() {
       </header>
 
       {/* ── Card ── */}
-      <div className="max-w-xl mx-auto card-glass rounded-3xl shadow-2xl overflow-hidden fade-in-up"
+      <div className="max-w-4xl mx-auto card-glass rounded-3xl shadow-2xl overflow-hidden fade-in-up"
            style={{ animationDelay: "0.1s" }}>
         <div className="h-1.5 bg-gradient-to-r from-blue-500 via-indigo-500 to-amber-400" />
 
-        <form onSubmit={handleSubmit} className="p-5 sm:p-7 space-y-5">
-
-          {/* ── Hari Ke + Hari ── */}
+        <form onSubmit={handleSubmit} className="p-5 sm:p-7">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-6">
+            <div className="space-y-5">
+              {/* ── Hari Ke + Hari ── */}
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label htmlFor="hariKe" className={labelCls}>Hari Ke</label>
@@ -370,12 +371,15 @@ export default function Home() {
             <p className="text-xs text-slate-400 mt-1">Tulis tiap kegiatan di baris terpisah (Enter)</p>
           </div>
 
-          {/* ── Divider ── */}
-          <div className="border-t border-indigo-500/20 pt-1">
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-3">Upload Gambar</p>
-          </div>
+            </div>
 
-          {/* ── Foto Dokumentasi (multi, max 3) ── */}
+            <div className="space-y-5">
+              {/* ── Divider ── */}
+              <div className="border-t border-indigo-500/20 md:border-t-0 md:pt-0 pt-1">
+                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-3">Upload Gambar</p>
+              </div>
+
+              {/* ── Foto Dokumentasi (multi, max 3) ── */}
           <div className="space-y-3">
             <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide">
               📷 Foto Dokumentasi
@@ -430,18 +434,19 @@ export default function Home() {
             onRemove={makeRemoveHandler(setImgTtdIns, setPrevTtdIns, refTtdIns)}
             inputRef={refTtdIns}
           />
+            </div>
+          </div>
 
-          {/* ── Error / Success ── */}
           {error && (
             <div className="flex items-start gap-3 bg-red-50 border border-red-200 text-red-700
-                            text-sm rounded-xl px-4 py-3 fade-in-up">
+                            text-sm rounded-xl px-4 py-3 fade-in-up mt-5">
               <span className="text-lg flex-shrink-0">⚠️</span>
               <span>{error}</span>
             </div>
           )}
           {success && (
             <div className="flex items-start gap-3 bg-emerald-50 border border-emerald-200 text-emerald-700
-                            text-sm rounded-xl px-4 py-3 fade-in-up">
+                            text-sm rounded-xl px-4 py-3 fade-in-up mt-5">
               <span className="text-lg flex-shrink-0">✅</span>
               <span>PDF berhasil dibuat dan sedang diunduh!</span>
             </div>
@@ -483,20 +488,32 @@ export default function Home() {
 
           </>
         ) : (
-          <div className="flex-1 flex flex-col items-center justify-center fade-in-up">
+          <div className="flex-1 flex flex-col lg:flex-row items-center lg:items-stretch justify-center gap-8 w-full max-w-5xl mx-auto fade-in-up">
             <ProfileCard
               avatarUrl="/profile.png"
-            >
-              <div className="pc-details-body mt-2 text-left">
-                <p className="font-semibold text-white text-[13px] mb-2">Bidang Minat & Keahlian Teknikal:</p>
-                <ul className="list-disc pl-4 space-y-1 text-xs">
-                  <li><strong>Sistem Operasi & Server:</strong> Pengalaman praktis dengan Kali Linux, pengujian Bazzite OS vs Windows untuk perangkat handheld, konfigurasi server Nginx, dan manajemen kontainer menggunakan Docker.</li>
-                  <li><strong>Pengembangan Backend:</strong> Studi perbandingan performa dan arsitektur framework seperti FastAPI vs gRPC.</li>
-                  <li><strong>Internet of Things (IoT):</strong> Minat tinggi dalam mengeksplorasi dan mengimplementasikan topik-topik IoT untuk proyek teknis maupun riset.</li>
-                  <li><strong>Sistem Informasi Geografis (SIG):</strong> Penggunaan perangkat lunak analisis spasial seperti QGIS.</li>
-                </ul>
+            />
+            <div className="card-glass rounded-3xl p-6 sm:p-8 flex flex-col justify-center text-left w-full lg:w-[450px]">
+              <h2 className="text-xl sm:text-2xl font-bold text-white mb-6 border-b border-indigo-500/20 pb-3">Informasi Tambahan</h2>
+              
+              <div className="space-y-5 text-sm">
+                <div>
+                  <h3 className="text-indigo-300 font-semibold mb-1">Sistem Operasi & Server</h3>
+                  <p className="text-slate-300 leading-relaxed">Pengalaman praktis dengan Kali Linux, pengujian Bazzite OS vs Windows untuk perangkat handheld, konfigurasi server Nginx, dan manajemen kontainer menggunakan Docker.</p>
+                </div>
+                <div>
+                  <h3 className="text-indigo-300 font-semibold mb-1">Pengembangan Backend</h3>
+                  <p className="text-slate-300 leading-relaxed">Studi perbandingan performa dan arsitektur framework seperti FastAPI vs gRPC.</p>
+                </div>
+                <div>
+                  <h3 className="text-indigo-300 font-semibold mb-1">Internet of Things (IoT)</h3>
+                  <p className="text-slate-300 leading-relaxed">Minat tinggi dalam mengeksplorasi dan mengimplementasikan topik-topik IoT untuk proyek teknis maupun riset.</p>
+                </div>
+                <div>
+                  <h3 className="text-indigo-300 font-semibold mb-1">Sistem Informasi Geografis (SIG)</h3>
+                  <p className="text-slate-300 leading-relaxed">Penggunaan perangkat lunak analisis spasial seperti QGIS.</p>
+                </div>
               </div>
-            </ProfileCard>
+            </div>
           </div>
         )}
 

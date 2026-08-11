@@ -36,7 +36,7 @@
   position: relative;
   touch-action: none;
   width: 100%;
-  max-width: 800px;
+  max-width: 400px;
   margin: auto;
 }
 
@@ -61,10 +61,10 @@
 }
 
 .pc-card {
-  height: 55svh;
-  max-height: 480px;
+  height: 80svh;
+  max-height: 580px;
   display: grid;
-  aspect-ratio: auto;
+  aspect-ratio: 0.718;
   border-radius: var(--card-radius);
   position: relative;
   background-blend-mode: color-dodge, normal, normal, normal;
@@ -247,11 +247,6 @@
 }
 
 .pc-avatar-content {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 40%;
-  height: 100%;
   mix-blend-mode: luminosity;
   overflow: visible;
   transform: translateZ(2);
@@ -362,13 +357,10 @@
 }
 
 .pc-content:not(.pc-avatar-content) {
-  position: absolute;
-  left: 40%;
-  top: 0;
-  width: 60%;
-  height: 100%;
+  max-height: 100%;
   overflow: hidden;
   text-align: center;
+  position: relative;
   transform: translate3d(
     calc(var(--pointer-from-left) * -6px + 3px),
     calc(var(--pointer-from-top) * -6px + 3px),
@@ -462,26 +454,9 @@
 }
 
 @media (max-width: 768px) {
-  .pc-card-wrapper {
-    max-width: 90vw;
-  }
-
   .pc-card {
-    height: auto;
-    aspect-ratio: 0.8;
-    max-height: none;
-  }
-  
-  .pc-avatar-content {
-    width: 100%;
-    height: 40%;
-  }
-
-  .pc-content:not(.pc-avatar-content) {
-    left: 0;
-    top: 40%;
-    width: 100%;
-    height: 60%;
+    height: 75svh;
+    max-height: 500px;
   }
 
   .pc-details h3 {
