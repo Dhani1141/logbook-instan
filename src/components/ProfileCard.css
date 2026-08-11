@@ -112,7 +112,7 @@
   mask-size: 150%;
   mask-position: top calc(200% - (var(--background-y) * 5)) left calc(100% - var(--background-x));
   transition: filter 0.8s ease;
-  filter: brightness(0.66) contrast(1.33) saturate(0.33) opacity(0.5);
+  filter: brightness(0.66) contrast(1.33) saturate(0.33) opacity(0.15);
   animation: holo-bg 18s linear infinite;
   animation-play-state: running;
   mix-blend-mode: color-dodge;
@@ -178,7 +178,7 @@
 
 .pc-card:hover .pc-shine,
 .pc-card.active .pc-shine {
-  filter: brightness(0.85) contrast(1.5) saturate(0.5);
+  filter: brightness(0.8) contrast(1.2) saturate(0.5) opacity(0.2);
   animation-play-state: paused;
 }
 
@@ -243,7 +243,6 @@
 }
 
 .pc-avatar-content {
-  mix-blend-mode: luminosity;
   overflow: visible;
   transform: translateZ(2);
   backface-visibility: hidden;
@@ -361,7 +360,6 @@
     0.1px
   );
   z-index: 5;
-  mix-blend-mode: luminosity;
 }
 
 .pc-details {
