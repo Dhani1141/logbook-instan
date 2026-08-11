@@ -302,7 +302,7 @@ export default function Home() {
         />
       </div>
 
-      <main className="relative z-10 min-h-svh px-4 py-8 sm:py-12 pb-32 flex flex-col">
+      <main className="relative z-10 min-h-svh px-4 pt-8 sm:pt-12 pb-32 flex flex-col">
         {currentView === 'logbook' ? (
           <>
 
