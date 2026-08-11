@@ -111,6 +111,12 @@ function ImageField({ id, label, icon, hint, capture, preview, file, onChange, o
 
 // ── Main Page ────────────────────────────────────────────────────────────────
 export default function Home() {
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth();
+  const academicYear = currentMonth >= 6 
+    ? `${currentYear}/${currentYear + 1}` 
+    : `${currentYear - 1}/${currentYear}`;
+
   const [showApp, setShowApp] = useState(false);
   const [currentView, setCurrentView] = useState<'logbook' | 'profile'>('logbook');
   const [form, setForm]   = useState<FormState>(INITIAL);
@@ -310,7 +316,7 @@ export default function Home() {
           Generator Logbook PKL
         </h1>
         <p className="text-blue-200 text-sm sm:text-base">
-          Teknik Informatika · UMKT · 2026/2027
+          Teknik Informatika · UMKT · {academicYear}
         </p>
       </header>
 
@@ -518,7 +524,7 @@ export default function Home() {
         )}
 
         <p className="text-center text-blue-300/50 text-xs mt-8 pb-4">
-          Elkunyuk © 2026
+          Elkunyuk © {currentYear}
         </p>
       </main>
 
