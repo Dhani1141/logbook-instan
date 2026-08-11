@@ -4,6 +4,9 @@ import { useState, useRef, useCallback, ChangeEvent, FormEvent } from "react";
 import Image from "next/image";
 import WelcomeScreen from "@/components/WelcomeScreen";
 import dynamic from "next/dynamic";
+import { VscBook, VscAccount } from "react-icons/vsc";
+import Dock from "@/components/Dock";
+import ProfileCard from "@/components/ProfileCard";
 
 const LiquidEtherBg = dynamic(() => import("@/components/LiquidEther"), { ssr: false });
 
@@ -107,8 +110,9 @@ function ImageField({ id, label, icon, hint, capture, preview, file, onChange, o
 }
 
 // ── Main Page ────────────────────────────────────────────────────────────────
-export default function HomePage() {
+export default function Home() {
   const [showApp, setShowApp] = useState(false);
+  const [currentView, setCurrentView] = useState<'logbook' | 'profile'>('logbook');
   const [form, setForm]   = useState<FormState>(INITIAL);
 
   const [loading, setLoading] = useState(false);
@@ -292,7 +296,9 @@ export default function HomePage() {
         />
       </div>
 
-      <main className="relative z-10 min-h-svh px-4 py-8 sm:py-12">
+      <main className="relative z-10 min-h-svh px-4 py-8 sm:py-12 pb-32 flex flex-col">
+        {currentView === 'logbook' ? (
+          <>
 
 
       {/* ── Header ── */}
@@ -475,10 +481,44 @@ export default function HomePage() {
         </div>
       </div>
 
-      <p className="text-center text-blue-300/50 text-xs mt-8">
-        Elkunyuk © 2026
-      </p>
-    </main>
+          </>
+        ) : (
+          <div className="flex-1 flex flex-col items-center justify-center fade-in-up">
+            <ProfileCard
+              avatarUrl="/profile.png"
+            >
+              <div className="pc-details-body mt-2 text-left">
+                <p className="font-semibold text-white text-[13px] mb-2">Bidang Minat & Keahlian Teknikal:</p>
+                <ul className="list-disc pl-4 space-y-1 text-xs">
+                  <li><strong>Sistem Operasi & Server:</strong> Pengalaman praktis dengan Kali Linux, pengujian Bazzite OS vs Windows untuk perangkat handheld, konfigurasi server Nginx, dan manajemen kontainer menggunakan Docker.</li>
+                  <li><strong>Pengembangan Backend:</strong> Studi perbandingan performa dan arsitektur framework seperti FastAPI vs gRPC.</li>
+                  <li><strong>Internet of Things (IoT):</strong> Minat tinggi dalam mengeksplorasi dan mengimplementasikan topik-topik IoT untuk proyek teknis maupun riset.</li>
+                  <li><strong>Sistem Informasi Geografis (SIG):</strong> Penggunaan perangkat lunak analisis spasial seperti QGIS.</li>
+                </ul>
+              </div>
+            </ProfileCard>
+          </div>
+        )}
+
+        <p className="text-center text-blue-300/50 text-xs mt-8 pb-4">
+          Elkunyuk © 2026
+        </p>
+      </main>
+
+      {/* ── Dock ── */}
+      {showApp && (
+        <div className="fixed bottom-4 left-0 right-0 z-50 flex justify-center fade-in-up" style={{ animationDelay: "0.3s" }}>
+          <Dock
+            items={[
+              { icon: <VscBook size={22} />, label: 'Logbook', onClick: () => setCurrentView('logbook') },
+              { icon: <VscAccount size={22} />, label: 'Profile', onClick: () => setCurrentView('profile') }
+            ]}
+            panelHeight={60}
+            baseItemSize={44}
+            magnification={60}
+          />
+        </div>
+      )}
     </>
   );
 }
