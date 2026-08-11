@@ -35,9 +35,6 @@
   transform: translate3d(0, 0, 0.1px);
   position: relative;
   touch-action: none;
-  width: 100%;
-  max-width: 400px;
-  margin: auto;
 }
 
 .pc-behind {
@@ -62,7 +59,7 @@
 
 .pc-card {
   height: 80svh;
-  max-height: 580px;
+  max-height: 540px;
   display: grid;
   aspect-ratio: 0.718;
   border-radius: var(--card-radius);
@@ -91,7 +88,6 @@
 .pc-card-shell {
   position: relative;
   z-index: 1;
-  width: 100%;
 }
 
 .pc-card * {
@@ -255,8 +251,6 @@
 
 .pc-avatar-content .avatar {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
   position: absolute;
   left: 50%;
   transform-origin: 50% 100%;
@@ -368,71 +362,48 @@
   );
   z-index: 5;
   mix-blend-mode: luminosity;
-  pointer-events: auto; /* allow scrolling inside */
 }
 
 .pc-details {
   width: 100%;
-  height: 100%;
   position: absolute;
-  top: 0;
-  padding: 2em 1.5em;
+  top: 3em;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
-  pointer-events: auto;
-  scrollbar-width: none;
-}
-
-.pc-details::-webkit-scrollbar {
-  display: none;
 }
 
 .pc-details h3 {
   font-weight: 600;
-  margin: 0 0 4px 0;
-  font-size: min(4svh, 2em);
-  background-image: linear-gradient(to bottom, #fff, #818cf8);
+  margin: 0;
+  font-size: min(5svh, 3em);
+  margin: 0;
+  background-image: linear-gradient(to bottom, #fff, #6f6fbe);
   background-size: 1em 1.5em;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   -webkit-background-clip: text;
 }
 
-.pc-details h4 {
-  font-weight: 500;
-  margin: 0 0 16px 0;
-  font-size: 14px;
-  color: #c7d2fe;
-}
-
-.pc-details-body {
-  text-align: left;
-  font-size: 13px;
-  line-height: 1.5;
-  color: rgba(255, 255, 255, 0.85);
-  background: rgba(0,0,0,0.4);
-  padding: 12px;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.1);
-  margin-bottom: auto; /* Push down to center a bit */
-}
-.pc-details-body ul {
-  margin: 8px 0 0 0;
-  padding-left: 16px;
-}
-.pc-details-body li {
-  margin-bottom: 8px;
-}
-.pc-details-body strong {
-  color: #fff;
+.pc-details p {
   font-weight: 600;
+  position: relative;
+  top: -12px;
+  white-space: nowrap;
+  font-size: 16px;
+  margin: 0 auto;
+  width: min-content;
+  background-image: linear-gradient(to bottom, #fff, #4a4ac0);
+  background-size: 1em 1.5em;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
 }
 
 @keyframes glow-bg {
   0% {
     --bgrotate: 0deg;
   }
+
   100% {
     --bgrotate: 360deg;
   }
@@ -445,6 +416,7 @@
       0 0,
       center;
   }
+
   100% {
     background-position:
       0 var(--background-y),
@@ -455,12 +427,20 @@
 
 @media (max-width: 768px) {
   .pc-card {
-    height: 75svh;
-    max-height: 500px;
+    height: 70svh;
+    max-height: 450px;
+  }
+
+  .pc-details {
+    top: 2em;
   }
 
   .pc-details h3 {
-    font-size: min(3.5svh, 1.8em);
+    font-size: min(4svh, 2.5em);
+  }
+
+  .pc-details p {
+    font-size: 14px;
   }
 
   .pc-user-info {
@@ -475,5 +455,108 @@
 
   .pc-user-details {
     gap: 10px;
+  }
+
+  .pc-handle {
+    font-size: 13px;
+  }
+
+  .pc-status {
+    font-size: 10px;
+  }
+
+  .pc-contact-btn {
+    padding: 6px 12px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .pc-card {
+    height: 60svh;
+    max-height: 380px;
+  }
+
+  .pc-details {
+    top: 1.5em;
+  }
+
+  .pc-details h3 {
+    font-size: min(3.5svh, 2em);
+  }
+
+  .pc-details p {
+    font-size: 12px;
+    top: -8px;
+  }
+
+  .pc-user-info {
+    --ui-inset: 12px;
+    padding: 8px 10px;
+  }
+
+  .pc-mini-avatar {
+    width: 24px;
+    height: 24px;
+  }
+
+  .pc-user-details {
+    gap: 8px;
+  }
+
+  .pc-handle {
+    font-size: 12px;
+  }
+
+  .pc-status {
+    font-size: 9px;
+  }
+
+  .pc-contact-btn {
+    padding: 5px 10px;
+    font-size: 10px;
+    border-radius: 50px;
+  }
+}
+
+@media (max-width: 320px) {
+  .pc-card {
+    height: 55svh;
+    max-height: 320px;
+  }
+
+  .pc-details h3 {
+    font-size: min(3svh, 1.5em);
+  }
+
+  .pc-details p {
+    font-size: 11px;
+  }
+
+  .pc-user-info {
+    padding: 6px 8px;
+  }
+
+  .pc-mini-avatar {
+    width: 20px;
+    height: 20px;
+  }
+
+  .pc-user-details {
+    gap: 6px;
+  }
+
+  .pc-handle {
+    font-size: 11px;
+  }
+
+  .pc-status {
+    font-size: 8px;
+  }
+
+  .pc-contact-btn {
+    padding: 4px 8px;
+    font-size: 9px;
+    border-radius: 50px;
   }
 }
