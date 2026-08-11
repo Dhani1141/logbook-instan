@@ -2,6 +2,8 @@
 
 import { useState, useRef, useCallback, ChangeEvent, FormEvent } from "react";
 import Image from "next/image";
+import WelcomeScreen from "@/components/WelcomeScreen";
+
 
 const HARI_OPTIONS = ["Senin","Selasa","Rabu","Kamis","Jumat","Sabtu","Minggu"];
 
@@ -102,7 +104,9 @@ function ImageField({ id, label, icon, hint, capture, preview, file, onChange, o
 
 // ── Main Page ────────────────────────────────────────────────────────────────
 export default function HomePage() {
+  const [showApp, setShowApp] = useState(false);
   const [form, setForm]   = useState<FormState>(INITIAL);
+
   const [loading, setLoading] = useState(false);
   const [error, setError]   = useState("");
   const [success, setSuccess] = useState(false);
@@ -254,7 +258,10 @@ export default function HomePage() {
   const labelCls = "block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5";
 
   return (
-    <main className="min-h-svh bg-gradient-to-br from-[#0f2044] via-[#1e3a5f] to-[#0c3547] px-4 py-8 sm:py-12">
+    <>
+      {!showApp && <WelcomeScreen onEnter={() => setShowApp(true)} />}
+      <main className="min-h-svh bg-gradient-to-br from-[#0f2044] via-[#1e3a5f] to-[#0c3547] px-4 py-8 sm:py-12">
+
 
       {/* ── Header ── */}
       <header className="text-center mb-8 fade-in-up">
@@ -440,5 +447,6 @@ export default function HomePage() {
         Universitas Muhammadiyah Kalimantan Timur © 2026
       </p>
     </main>
+    </>
   );
 }
