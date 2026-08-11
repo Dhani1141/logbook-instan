@@ -3,6 +3,10 @@
 import { useState, useRef, useCallback, ChangeEvent, FormEvent } from "react";
 import Image from "next/image";
 import WelcomeScreen from "@/components/WelcomeScreen";
+import dynamic from "next/dynamic";
+
+const LiquidEtherBg = dynamic(() => import("@/components/LiquidEther"), { ssr: false });
+
 
 
 const HARI_OPTIONS = ["Senin","Selasa","Rabu","Kamis","Jumat","Sabtu","Minggu"];
@@ -40,7 +44,7 @@ interface ImageFieldProps {
 }
 
 function ImageField({ id, label, icon, hint, capture, preview, file, onChange, onRemove, inputRef }: ImageFieldProps) {
-  const labelCls = "block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5";
+  const labelCls = "block text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1.5";
 
   return (
     <div>
@@ -49,25 +53,25 @@ function ImageField({ id, label, icon, hint, capture, preview, file, onChange, o
         <button
           type="button"
           onClick={() => inputRef.current?.click()}
-          className="w-full h-28 rounded-2xl border-2 border-dashed border-slate-300
-                     bg-slate-50/60 flex flex-col items-center justify-center gap-1.5
+          className="w-full h-28 rounded-2xl border-2 border-dashed border-indigo-500/40
+                     bg-white/5 flex flex-col items-center justify-center gap-1.5
                      text-slate-400 transition-all duration-200
-                     hover:border-blue-400 hover:bg-blue-50/40 active:scale-[0.98]"
+                     hover:border-indigo-400 hover:bg-indigo-500/10 active:scale-[0.98]"
         >
           <span className="text-3xl">{icon}</span>
           <span className="text-xs font-medium">{hint}</span>
         </button>
       ) : (
-        <div className="relative rounded-2xl overflow-hidden border border-slate-200 shadow-sm">
-          <div className="relative w-full h-36 bg-slate-100">
+        <div className="relative rounded-2xl overflow-hidden border border-indigo-500/30 shadow-sm">
+          <div className="relative w-full h-36 bg-slate-900/60">
             <Image src={preview} alt={label} fill className="object-contain" unoptimized />
           </div>
           <div className="absolute top-2 right-2 flex gap-2">
             <button
               type="button"
               onClick={() => inputRef.current?.click()}
-              className="bg-white/90 backdrop-blur-sm text-slate-700 text-xs font-semibold
-                         px-3 py-1 rounded-full shadow-md hover:bg-white transition-all"
+              className="bg-slate-800/90 backdrop-blur-sm text-slate-200 text-xs font-semibold
+                         px-3 py-1 rounded-full shadow-md hover:bg-slate-700 transition-all"
             >
               Ganti
             </button>
@@ -80,9 +84,9 @@ function ImageField({ id, label, icon, hint, capture, preview, file, onChange, o
               Hapus
             </button>
           </div>
-          <div className="bg-white/90 px-3 py-1.5 flex items-center gap-2">
-            <span className="text-xs text-slate-500 truncate">📎 {file?.name}</span>
-            <span className="text-xs text-slate-400 ml-auto flex-shrink-0">
+          <div className="bg-slate-900/80 px-3 py-1.5 flex items-center gap-2">
+            <span className="text-xs text-slate-400 truncate">📎 {file?.name}</span>
+            <span className="text-xs text-slate-500 ml-auto flex-shrink-0">
               {file ? (file.size / 1024 / 1024).toFixed(2) + " MB" : ""}
             </span>
           </div>
@@ -252,15 +256,43 @@ export default function HomePage() {
   );
 
   const inputCls =
-    "w-full rounded-xl border border-slate-200 bg-white/70 px-4 py-3 text-sm " +
-    "transition-all duration-200 focus:border-blue-400 focus:bg-white " +
-    "placeholder:text-slate-400";
-  const labelCls = "block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5";
+    "w-full rounded-xl border border-indigo-500/30 bg-white/5 px-4 py-3 text-sm text-slate-100 " +
+    "transition-all duration-200 focus:border-indigo-400 focus:bg-white/10 " +
+    "placeholder:text-slate-500";
+  const labelCls = "block text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1.5";
 
   return (
     <>
       {!showApp && <WelcomeScreen onEnter={() => setShowApp(true)} />}
-      <main className="min-h-svh bg-gradient-to-br from-[#0f2044] via-[#1e3a5f] to-[#0c3547] px-4 py-8 sm:py-12">
+
+      {/* ── LiquidEther fullscreen background ── */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: "fixed",
+          inset: 0,
+          zIndex: 0,
+          background: "#050810",
+        }}
+      >
+        <LiquidEtherBg
+          colors={["#0f172a", "#312e81", "#4338ca", "#6366f1", "#38bdf8", "#0ea5e9"]}
+          mouseForce={22}
+          cursorSize={110}
+          resolution={0.45}
+          autoDemo={true}
+          autoSpeed={0.45}
+          autoIntensity={2.4}
+          autoResumeDelay={2000}
+          autoRampDuration={0.8}
+          BFECC={true}
+          isBounce={false}
+          isViscous={false}
+          style={{ width: "100%", height: "100%" }}
+        />
+      </div>
+
+      <main className="relative z-10 min-h-svh px-4 py-8 sm:py-12">
 
 
       {/* ── Header ── */}
@@ -333,15 +365,15 @@ export default function HomePage() {
           </div>
 
           {/* ── Divider ── */}
-          <div className="border-t border-slate-200 pt-1">
-            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-3">Upload Gambar</p>
+          <div className="border-t border-indigo-500/20 pt-1">
+            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-3">Upload Gambar</p>
           </div>
 
           {/* ── Foto Dokumentasi (multi, max 3) ── */}
           <div className="space-y-3">
-            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide">
               📷 Foto Dokumentasi
-              <span className="ml-2 text-blue-400 normal-case font-normal">
+              <span className="ml-2 text-indigo-400 normal-case font-normal">
                 ({imgsDok.filter(Boolean).length}/{MAX_DOK} foto)
               </span>
             </p>
@@ -444,7 +476,7 @@ export default function HomePage() {
       </div>
 
       <p className="text-center text-blue-300/50 text-xs mt-8">
-        Universitas Muhammadiyah Kalimantan Timur © 2026
+        Elkunyuk © 2026
       </p>
     </main>
     </>
