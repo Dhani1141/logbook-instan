@@ -109,6 +109,39 @@ function ImageField({ id, label, icon, hint, capture, preview, file, onChange, o
   );
 }
 
+// ── Real-time Clock Component ────────────────────────────────────────────────
+function HeaderClock() {
+  const [time, setTime] = useState<Date | null>(null);
+
+  useEffect(() => {
+    setTime(new Date());
+    const timer = setInterval(() => setTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  if (!time) return null;
+
+  const hour = time.getHours();
+  let greeting = 'Good Evening';
+  if (hour >= 5 && hour < 12) greeting = 'Good Morning';
+  else if (hour >= 12 && hour < 17) greeting = 'Good Afternoon';
+  else if (hour >= 17 && hour < 21) greeting = 'Good Evening';
+  else greeting = 'Good Night';
+
+  const timeString = time.toLocaleTimeString('id-ID', { 
+    hour: '2-digit', 
+    minute: '2-digit', 
+    second: '2-digit' 
+  }).replace(/\./g, ':');
+
+  return (
+    <div className="hidden md:flex flex-col items-end justify-center">
+      <span className="text-sm font-bold text-indigo-200 tracking-wide">{greeting}</span>
+      <span className="text-[0.7rem] font-mono font-medium text-slate-400 tracking-widest mt-0.5">{timeString} WIB</span>
+    </div>
+  );
+}
+
 // ── Main Page ────────────────────────────────────────────────────────────────
 export default function Home() {
   const currentYear = new Date().getFullYear();
@@ -341,12 +374,15 @@ export default function Home() {
               <p className="text-indigo-300/80 text-[0.65rem] sm:text-xs font-medium uppercase tracking-wider mt-0.5">Teknik Informatika · UMKT · {academicYear}</p>
             </div>
           </div>
-          <button 
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden w-10 h-10 flex flex-shrink-0 items-center justify-center rounded-xl bg-slate-800/80 border border-indigo-500/30 text-indigo-300 hover:text-white transition-colors"
-          >
-            {mobileMenuOpen ? "✕" : "☰"}
-          </button>
+          <div className="flex items-center gap-4">
+            <HeaderClock />
+            <button 
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden w-10 h-10 flex flex-shrink-0 items-center justify-center rounded-xl bg-slate-800/80 border border-indigo-500/30 text-indigo-300 hover:text-white transition-colors"
+            >
+              {mobileMenuOpen ? "✕" : "☰"}
+            </button>
+          </div>
         </header>
       )}
 
