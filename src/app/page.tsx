@@ -500,6 +500,7 @@ export default function Home() {
           <div className="flex-1 flex flex-col lg:flex-row items-center lg:items-stretch justify-center gap-8 w-full max-w-5xl mx-auto fade-in-up">
             <ProfileCard
               avatarUrl="/profile.png"
+              miniAvatarUrl="/mini-profile.png"
               onContactClick={() => window.open("https://wa.me/6285350607184", "_blank")}
             />
             <div className="card-glass rounded-3xl p-6 sm:p-8 flex flex-col justify-center text-left w-full lg:w-[450px]">
