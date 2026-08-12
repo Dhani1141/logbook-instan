@@ -562,11 +562,7 @@ export default function Home() {
           <div className="hidden md:block fixed top-0 bottom-0 left-0 w-6 z-40 peer" />
 
           {/* Desktop Edge Glow Indicator */}
-          <div className="hidden md:flex fixed top-1/2 left-0 -translate-y-1/2 w-5 h-24 bg-gradient-to-b from-transparent via-indigo-500/20 to-transparent rounded-r-full border-r border-indigo-400/30 shadow-[0_0_15px_rgba(99,102,241,0.4)] transition-all duration-300 z-30 peer-hover:opacity-0 peer-hover:-translate-x-full items-center justify-center animate-[pulse_3s_ease-in-out_infinite]">
-            <svg className="w-3.5 h-3.5 text-indigo-300/80 translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-            </svg>
-          </div>
+          <div className="hidden md:block fixed top-1/2 left-0 -translate-y-1/2 w-1.5 h-24 bg-gradient-to-b from-transparent via-indigo-500/50 to-transparent rounded-r-full shadow-[0_0_15px_rgba(99,102,241,0.4)] transition-all duration-300 z-30 peer-hover:opacity-0 peer-hover:-translate-x-full animate-[pulse_3s_ease-in-out_infinite]" />
 
           <div className={`fixed top-0 bottom-0 left-0 z-50 flex items-center transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]
             ${mobileMenuOpen ? "translate-x-0 opacity-100 pointer-events-auto" : "-translate-x-8 opacity-0 pointer-events-none"}
