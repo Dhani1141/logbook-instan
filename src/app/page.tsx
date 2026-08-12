@@ -274,29 +274,6 @@ export default function Home() {
 
   return (
     <>
-      <style>{`
-        .sidebar-wrapper {
-          transform: translateX(-100%);
-        }
-        @media (min-width: 768px) {
-          .sidebar-wrapper {
-            transform: translateX(calc(-100% + 12px));
-          }
-          .sidebar-trigger:hover + .sidebar-wrapper,
-          .sidebar-wrapper:hover {
-            transform: translateX(0);
-          }
-          .sidebar-wrapper:hover .sidebar-indicator {
-            opacity: 0;
-          }
-          .sidebar-trigger:hover + .sidebar-wrapper .sidebar-indicator {
-            opacity: 0;
-          }
-        }
-        .sidebar-open {
-          transform: translateX(0) !important;
-        }
-      `}</style>
       {!showApp && <WelcomeScreen onEnter={() => setShowApp(true)} />}
 
       {/* ── LiquidEther fullscreen background ── */}
@@ -328,15 +305,21 @@ export default function Home() {
 
       {showApp && (
         <header className="fixed top-0 left-0 right-0 z-40 bg-slate-900/60 backdrop-blur-md border-b border-indigo-500/20 px-4 sm:px-8 py-3.5 flex items-center justify-between fade-in-up shadow-lg">
-          <div className="flex items-center gap-4">
-            <div className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-indigo-500/20 border border-indigo-500/30 shadow-inner">
-              <span className="text-xl">📋</span>
+          <div className="flex items-center gap-3 sm:gap-4">
+            <div className="inline-flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-indigo-500/20 border border-indigo-500/30 shadow-inner flex-shrink-0">
+              <span className="text-lg sm:text-xl">📋</span>
             </div>
             <div>
-              <h1 className="text-sm sm:text-base font-bold text-slate-100 leading-tight tracking-wide">Generator Logbook PKL</h1>
-              <p className="text-indigo-300/80 text-[0.7rem] sm:text-xs font-medium uppercase tracking-wider mt-0.5">Teknik Informatika · UMKT · {academicYear}</p>
+              <h1 className="text-xs sm:text-base font-bold text-slate-100 leading-tight tracking-wide">Generator Logbook PKL</h1>
+              <p className="text-indigo-300/80 text-[0.65rem] sm:text-xs font-medium uppercase tracking-wider mt-0.5">Teknik Informatika · UMKT · {academicYear}</p>
             </div>
           </div>
+          <button 
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden w-10 h-10 flex flex-shrink-0 items-center justify-center rounded-xl bg-slate-800/80 border border-indigo-500/30 text-indigo-300 hover:text-white transition-colors"
+          >
+            {mobileMenuOpen ? "✕" : "☰"}
+          </button>
         </header>
       )}
 
@@ -562,16 +545,24 @@ export default function Home() {
         <>
           {/* Mobile Backdrop */}
           <div 
-            className={`md:hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-40 transition-opacity duration-300 ${mobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+            className={`md:hidden fixed inset-0 bg-black/50 backdrop-blur-[2px] z-30 transition-opacity duration-300 ${mobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}
             onClick={() => setMobileMenuOpen(false)}
           />
 
           {/* Desktop Hover Trigger Area */}
-          <div className="hidden md:block fixed top-0 bottom-0 left-0 w-6 z-40 sidebar-trigger" />
+          <div className="hidden md:block fixed top-0 bottom-0 left-0 w-6 z-40 peer" />
+
+          {/* Desktop Edge Glow Indicator */}
+          <div className="hidden md:block fixed top-1/2 left-0 -translate-y-1/2 w-1.5 h-24 bg-gradient-to-b from-transparent via-indigo-500/50 to-transparent rounded-r-full shadow-[0_0_15px_rgba(99,102,241,0.4)] transition-all duration-300 z-30 peer-hover:opacity-0 peer-hover:-translate-x-full" />
 
           {/* Sidebar Container */}
-          <div className={`fixed top-0 bottom-0 left-0 z-50 flex items-center transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] sidebar-wrapper ${mobileMenuOpen ? "sidebar-open" : ""} fade-in-up`} style={{ animationDelay: "0.3s" }}>
-            <div className="pl-2 py-4 pr-6">
+          <div className={`fixed top-0 bottom-0 left-0 z-50 flex items-center transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]
+            ${mobileMenuOpen ? "translate-x-0 opacity-100 pointer-events-auto" : "-translate-x-8 opacity-0 pointer-events-none"}
+            md:-translate-x-8 md:opacity-0 md:pointer-events-none
+            md:peer-hover:translate-x-0 md:peer-hover:opacity-100 md:peer-hover:pointer-events-auto
+            md:hover:translate-x-0 md:hover:opacity-100 md:hover:pointer-events-auto
+          `}>
+            <div className="pl-4 py-4 pr-8">
               <Dock
                 direction="vertical"
                 items={[
@@ -583,18 +574,7 @@ export default function Home() {
                 magnification={60}
               />
             </div>
-            {/* Desktop Glow Indicator */}
-            <div className="sidebar-indicator absolute right-2 top-1/2 -translate-y-1/2 h-32 w-1 bg-gradient-to-b from-transparent via-indigo-500/50 to-transparent blur-[1px] hidden md:block rounded-full transition-opacity duration-300 pointer-events-none" />
           </div>
-
-          {/* Mobile Toggle Button */}
-          <button 
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden fixed bottom-6 left-6 z-50 w-12 h-12 rounded-full bg-slate-800/90 backdrop-blur-md border border-indigo-500/30 shadow-lg shadow-indigo-500/20 flex items-center justify-center text-indigo-300 hover:text-white transition-all active:scale-95"
-            aria-label="Toggle Menu"
-          >
-            {mobileMenuOpen ? "✕" : "☰"}
-          </button>
         </>
       )}
     </>
