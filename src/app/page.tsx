@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback, ChangeEvent, FormEvent } from "react";
+import { useState, useEffect, useRef, useCallback, ChangeEvent, FormEvent } from "react";
 import Image from "next/image";
 import WelcomeScreen from "@/components/WelcomeScreen";
 import dynamic from "next/dynamic";
@@ -147,7 +147,7 @@ export default function Home() {
   const [prevTtdIns, setPrevTtdIns] = useState("");
   const refTtdIns                   = useRef<HTMLInputElement | null>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (showApp) {
       const t1 = setTimeout(() => setPeekState(1), 800);
       const t2 = setTimeout(() => setPeekState(2), 3500);
