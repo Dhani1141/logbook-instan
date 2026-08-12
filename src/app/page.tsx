@@ -149,8 +149,8 @@ export default function Home() {
 
   useEffect(() => {
     if (showApp) {
-      const t1 = setTimeout(() => setPeekState(1), 800);
-      const t2 = setTimeout(() => setPeekState(2), 3000);
+      const t1 = setTimeout(() => setPeekState(1), 500);
+      const t2 = setTimeout(() => setPeekState(2), 2500);
       return () => { clearTimeout(t1); clearTimeout(t2); };
     }
   }, [showApp]);
@@ -285,15 +285,18 @@ export default function Home() {
     <>
       <style>{`
         @keyframes waveHello {
-          0% { transform: translateX(-40px); opacity: 0; }
-          30% { transform: translateX(15px); opacity: 1; }
-          50% { transform: translateX(-8px); opacity: 1; }
-          70% { transform: translateX(4px); opacity: 1; }
-          100% { transform: translateX(0); opacity: 1; }
+          0% { transform: translateX(-48px) rotate(0deg); opacity: 0; }
+          15% { transform: translateX(12px) rotate(5deg); opacity: 1; }
+          30% { transform: translateX(-4px) rotate(-3deg); opacity: 1; }
+          45% { transform: translateX(6px) rotate(2deg); opacity: 1; }
+          60% { transform: translateX(-2px) rotate(-1deg); opacity: 1; }
+          75% { transform: translateX(0) rotate(0deg); opacity: 1; }
+          100% { transform: translateX(0) rotate(0deg); opacity: 1; }
         }
         @media (min-width: 768px) {
           .md-animate-wave-hello {
-            animation: waveHello 1s ease-in-out forwards;
+            transform-origin: left center;
+            animation: waveHello 1.5s ease-out forwards;
           }
         }
       `}</style>
