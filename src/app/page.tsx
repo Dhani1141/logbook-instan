@@ -583,7 +583,7 @@ export default function Home() {
 
           <div className={`fixed top-0 bottom-0 left-0 z-50 flex items-center transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]
             ${mobileMenuOpen ? "translate-x-0 opacity-100 pointer-events-auto" : "-translate-x-8 opacity-0 pointer-events-none"}
-            ${peekState === 1 ? "md:opacity-100 md:pointer-events-auto md-animate-wave-hello" : "md:-translate-x-8 md:opacity-0 md:pointer-events-none"}
+            ${peekState === 1 ? "md:translate-x-0 md:opacity-100 md:pointer-events-auto md-animate-wave-hello" : "md:-translate-x-8 md:opacity-0 md:pointer-events-none"}
             md:peer-hover:translate-x-0 md:peer-hover:opacity-100 md:peer-hover:pointer-events-auto
             md:hover:translate-x-0 md:hover:opacity-100 md:hover:pointer-events-auto
           `}>
