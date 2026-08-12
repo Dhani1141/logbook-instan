@@ -119,6 +119,7 @@ export default function Home() {
 
   const [showApp, setShowApp] = useState(false);
   const [currentView, setCurrentView] = useState<'logbook' | 'profile'>('logbook');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [form, setForm]   = useState<FormState>(INITIAL);
 
   const [loading, setLoading] = useState(false);
@@ -273,6 +274,29 @@ export default function Home() {
 
   return (
     <>
+      <style>{`
+        .sidebar-wrapper {
+          transform: translateX(-100%);
+        }
+        @media (min-width: 768px) {
+          .sidebar-wrapper {
+            transform: translateX(calc(-100% + 12px));
+          }
+          .sidebar-trigger:hover + .sidebar-wrapper,
+          .sidebar-wrapper:hover {
+            transform: translateX(0);
+          }
+          .sidebar-wrapper:hover .sidebar-indicator {
+            opacity: 0;
+          }
+          .sidebar-trigger:hover + .sidebar-wrapper .sidebar-indicator {
+            opacity: 0;
+          }
+        }
+        .sidebar-open {
+          transform: translateX(0) !important;
+        }
+      `}</style>
       {!showApp && <WelcomeScreen onEnter={() => setShowApp(true)} />}
 
       {/* ── LiquidEther fullscreen background ── */}
@@ -316,7 +340,7 @@ export default function Home() {
         </header>
       )}
 
-      <main className="relative z-10 min-h-svh px-4 pt-28 pb-10 flex flex-col sm:pl-28 pl-24">
+      <main className="relative z-10 min-h-svh px-4 sm:px-8 pt-28 pb-10 flex flex-col">
         {currentView === 'logbook' ? (
           <>
 
@@ -535,18 +559,43 @@ export default function Home() {
 
       {/* ── Sidebar Dock ── */}
       {showApp && (
-        <div className="fixed top-0 bottom-0 left-0 z-50 flex items-center fade-in-up" style={{ animationDelay: "0.3s" }}>
-          <Dock
-            direction="vertical"
-            items={[
-              { icon: <VscBook size={22} />, label: 'Logbook', onClick: () => setCurrentView('logbook') },
-              { icon: <VscAccount size={22} />, label: 'Profile', onClick: () => setCurrentView('profile') }
-            ]}
-            panelHeight={60}
-            baseItemSize={44}
-            magnification={60}
+        <>
+          {/* Mobile Backdrop */}
+          <div 
+            className={`md:hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-40 transition-opacity duration-300 ${mobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+            onClick={() => setMobileMenuOpen(false)}
           />
-        </div>
+
+          {/* Desktop Hover Trigger Area */}
+          <div className="hidden md:block fixed top-0 bottom-0 left-0 w-6 z-40 sidebar-trigger" />
+
+          {/* Sidebar Container */}
+          <div className={`fixed top-0 bottom-0 left-0 z-50 flex items-center transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] sidebar-wrapper ${mobileMenuOpen ? "sidebar-open" : ""} fade-in-up`} style={{ animationDelay: "0.3s" }}>
+            <div className="pl-2 py-4 pr-6">
+              <Dock
+                direction="vertical"
+                items={[
+                  { icon: <VscBook size={22} />, label: 'Logbook', onClick: () => { setCurrentView('logbook'); setMobileMenuOpen(false); } },
+                  { icon: <VscAccount size={22} />, label: 'Profile', onClick: () => { setCurrentView('profile'); setMobileMenuOpen(false); } }
+                ]}
+                panelHeight={60}
+                baseItemSize={44}
+                magnification={60}
+              />
+            </div>
+            {/* Desktop Glow Indicator */}
+            <div className="sidebar-indicator absolute right-2 top-1/2 -translate-y-1/2 h-32 w-1 bg-gradient-to-b from-transparent via-indigo-500/50 to-transparent blur-[1px] hidden md:block rounded-full transition-opacity duration-300 pointer-events-none" />
+          </div>
+
+          {/* Mobile Toggle Button */}
+          <button 
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden fixed bottom-6 left-6 z-50 w-12 h-12 rounded-full bg-slate-800/90 backdrop-blur-md border border-indigo-500/30 shadow-lg shadow-indigo-500/20 flex items-center justify-center text-indigo-300 hover:text-white transition-all active:scale-95"
+            aria-label="Toggle Menu"
+          >
+            {mobileMenuOpen ? "✕" : "☰"}
+          </button>
+        </>
       )}
     </>
   );
