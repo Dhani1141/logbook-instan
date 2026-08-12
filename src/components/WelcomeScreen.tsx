@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import dynamic from "next/dynamic";
 
 // Lazy-load WebGL component agar tidak crash saat SSR
@@ -14,6 +14,27 @@ export default function WelcomeScreen({ onEnter }: WelcomeScreenProps) {
   const [visible, setVisible] = useState(true);
   const [fading, setFading] = useState(false);
   const [textReady, setTextReady] = useState(false);
+  const [greeting, setGreeting] = useState("");
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    const hour = new Date().getHours();
+    if (hour >= 5 && hour < 12) setGreeting("Good morning");
+    else if (hour >= 12 && hour < 15) setGreeting("Good afternoon");
+    else if (hour >= 15 && hour < 19) setGreeting("Good evening");
+    else setGreeting("Good night");
+
+    audioRef.current = new Audio("/welcome-sound.mp3");
+    // Play the audio once the component mounts
+    audioRef.current.play().catch((err) => console.log("Audio autoplay prevented:", err));
+
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
+    };
+  }, []);
 
   // Delay teks agar muncul setelah animasi ring mulai
   useEffect(() => {
@@ -22,6 +43,9 @@ export default function WelcomeScreen({ onEnter }: WelcomeScreenProps) {
   }, []);
 
   const handleEnter = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+    }
     setFading(true);
     setTimeout(() => {
       setVisible(false);
@@ -65,6 +89,7 @@ export default function WelcomeScreen({ onEnter }: WelcomeScreenProps) {
       {/* Text overlay — centered */}
       <div className={`welcome-text ${textReady ? "welcome-text--visible" : ""}`}>
         <p className="welcome-label">Welcome</p>
+        <p className="welcome-greeting">{greeting}</p>
         <p className="welcome-sub">Elkunyuk</p>
         <p className="welcome-hint">Tap / klik untuk mulai</p>
       </div>
@@ -120,6 +145,16 @@ export default function WelcomeScreen({ onEnter }: WelcomeScreenProps) {
           text-shadow: none;
           /* Soft glow behind via drop-shadow filter */
           filter: drop-shadow(0 0 28px rgba(99,102,241,0.55));
+        }
+
+        .welcome-greeting {
+          font-family: 'Inter', system-ui, sans-serif;
+          font-size: clamp(1.2rem, 3vw, 2rem);
+          font-weight: 600;
+          color: #e2e8f0;
+          margin-top: -6px;
+          margin-bottom: 8px;
+          text-shadow: 0 0 10px rgba(226,232,240,0.3);
         }
 
         .welcome-sub {
