@@ -120,6 +120,7 @@ export default function Home() {
   const [showApp, setShowApp] = useState(false);
   const [currentView, setCurrentView] = useState<'logbook' | 'profile'>('logbook');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [hasPeeked, setHasPeeked] = useState(false);
   const [form, setForm]   = useState<FormState>(INITIAL);
 
   const [loading, setLoading] = useState(false);
@@ -145,6 +146,13 @@ export default function Home() {
   const [imgTtdIns, setImgTtdIns]   = useState<File | null>(null);
   const [prevTtdIns, setPrevTtdIns] = useState("");
   const refTtdIns                   = useRef<HTMLInputElement | null>(null);
+
+  React.useEffect(() => {
+    if (showApp) {
+      const timer = setTimeout(() => setHasPeeked(true), 2500);
+      return () => clearTimeout(timer);
+    }
+  }, [showApp]);
 
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -553,12 +561,16 @@ export default function Home() {
           <div className="hidden md:block fixed top-0 bottom-0 left-0 w-6 z-40 peer" />
 
           {/* Desktop Edge Glow Indicator */}
-          <div className="hidden md:block fixed top-1/2 left-0 -translate-y-1/2 w-1.5 h-24 bg-gradient-to-b from-transparent via-indigo-500/50 to-transparent rounded-r-full shadow-[0_0_15px_rgba(99,102,241,0.4)] transition-all duration-300 z-30 peer-hover:opacity-0 peer-hover:-translate-x-full" />
+          <div className="hidden md:flex fixed top-1/2 left-0 -translate-y-1/2 w-5 h-24 bg-gradient-to-b from-transparent via-indigo-500/20 to-transparent rounded-r-full border-r border-indigo-400/30 shadow-[0_0_15px_rgba(99,102,241,0.4)] transition-all duration-300 z-30 peer-hover:opacity-0 peer-hover:-translate-x-full items-center justify-center animate-[pulse_3s_ease-in-out_infinite]">
+            <svg className="w-3.5 h-3.5 text-indigo-300/80 translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
 
           {/* Sidebar Container */}
-          <div className={`fixed top-0 bottom-0 left-0 z-50 flex items-center transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]
+          <div className={`fixed top-0 bottom-0 left-0 z-50 flex items-center transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]
             ${mobileMenuOpen ? "translate-x-0 opacity-100 pointer-events-auto" : "-translate-x-8 opacity-0 pointer-events-none"}
-            md:-translate-x-8 md:opacity-0 md:pointer-events-none
+            md:${hasPeeked ? "-translate-x-8 opacity-0 pointer-events-none" : "translate-x-0 opacity-100 pointer-events-auto"}
             md:peer-hover:translate-x-0 md:peer-hover:opacity-100 md:peer-hover:pointer-events-auto
             md:hover:translate-x-0 md:hover:opacity-100 md:hover:pointer-events-auto
           `}>
