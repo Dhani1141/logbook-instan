@@ -302,23 +302,26 @@ export default function Home() {
         />
       </div>
 
-      <main className="relative z-10 min-h-svh px-4 pt-8 sm:pt-12 pb-32 flex flex-col">
+      {showApp && (
+        <header className="fixed top-0 left-0 right-0 z-40 bg-slate-900/60 backdrop-blur-md border-b border-indigo-500/20 px-4 sm:px-8 py-3.5 flex items-center justify-between fade-in-up shadow-lg">
+          <div className="flex items-center gap-4">
+            <div className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-indigo-500/20 border border-indigo-500/30 shadow-inner">
+              <span className="text-xl">📋</span>
+            </div>
+            <div>
+              <h1 className="text-sm sm:text-base font-bold text-slate-100 leading-tight tracking-wide">Generator Logbook PKL</h1>
+              <p className="text-indigo-300/80 text-[0.7rem] sm:text-xs font-medium uppercase tracking-wider mt-0.5">Teknik Informatika · UMKT · {academicYear}</p>
+            </div>
+          </div>
+        </header>
+      )}
+
+      <main className="relative z-10 min-h-svh px-4 pt-28 pb-10 flex flex-col sm:pl-28 pl-24">
         {currentView === 'logbook' ? (
           <>
 
 
-      {/* ── Header ── */}
-      <header className="text-center mb-8 fade-in-up">
-        <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 mb-4 shadow-lg">
-          <span className="text-3xl">📋</span>
-        </div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-white mb-1">
-          Generator Logbook PKL
-        </h1>
-        <p className="text-blue-200 text-sm sm:text-base">
-          Teknik Informatika · UMKT · {academicYear}
-        </p>
-      </header>
+      {/* ── Header removed from here ── */}
 
       {/* ── Card ── */}
       <div className="max-w-4xl mx-auto card-glass rounded-3xl shadow-2xl overflow-hidden fade-in-up"
@@ -529,10 +532,11 @@ export default function Home() {
         </p>
       </main>
 
-      {/* ── Dock ── */}
+      {/* ── Sidebar Dock ── */}
       {showApp && (
-        <div className="fixed bottom-4 left-0 right-0 z-50 flex justify-center fade-in-up" style={{ animationDelay: "0.3s" }}>
+        <div className="fixed top-0 bottom-0 left-0 z-50 flex items-center fade-in-up" style={{ animationDelay: "0.3s" }}>
           <Dock
+            direction="vertical"
             items={[
               { icon: <VscBook size={22} />, label: 'Logbook', onClick: () => setCurrentView('logbook') },
               { icon: <VscAccount size={22} />, label: 'Profile', onClick: () => setCurrentView('profile') }

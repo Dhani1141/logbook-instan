@@ -9,24 +9,29 @@ interface DockItemProps {
   children: React.ReactNode;
   className?: string;
   onClick?: () => void;
-  mouseX: any;
+  mousePos: any;
   spring: SpringOptions;
   distance: number;
   magnification: number;
   baseItemSize: number;
   label?: string;
+  direction: 'horizontal' | 'vertical';
 }
 
-function DockItem({ children, className = '', onClick, mouseX, spring, distance, magnification, baseItemSize, label }: DockItemProps) {
+function DockItem({ children, className = '', onClick, mousePos, spring, distance, magnification, baseItemSize, label, direction }: DockItemProps) {
   const ref = useRef<HTMLDivElement>(null);
   const isHovered = useMotionValue(0);
 
-  const mouseDistance = useTransform(mouseX, (val: number) => {
+  const isVertical = direction === 'vertical';
+
+  const mouseDistance = useTransform(mousePos, (val: number) => {
     const rect = ref.current?.getBoundingClientRect() ?? {
       x: 0,
-      width: baseItemSize
+      y: 0,
+      width: baseItemSize,
+      height: baseItemSize
     };
-    return val - rect.x - baseItemSize / 2;
+    return val - (isVertical ? rect.y : rect.x) - baseItemSize / 2;
   });
 
   const targetSize = useTransform(mouseDistance, [-distance, 0, distance], [baseItemSize, magnification, baseItemSize]);
@@ -63,7 +68,7 @@ function DockItem({ children, className = '', onClick, mouseX, spring, distance,
   );
 }
 
-function DockLabel({ children, className = '', ...rest }: { children: React.ReactNode; className?: string; [key: string]: any }) {
+function DockLabel({ children, className = '', direction = 'horizontal', ...rest }: { children: React.ReactNode; className?: string; direction?: 'horizontal' | 'vertical'; [key: string]: any }) {
   const { isHovered } = rest;
   const [isVisible, setIsVisible] = useState(false);
 
@@ -79,13 +84,12 @@ function DockLabel({ children, className = '', ...rest }: { children: React.Reac
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          initial={{ opacity: 0, y: 0 }}
-          animate={{ opacity: 1, y: -10 }}
-          exit={{ opacity: 0, y: 0 }}
+          initial={direction === 'vertical' ? { opacity: 0, x: 0 } : { opacity: 0, y: 0 }}
+          animate={direction === 'vertical' ? { opacity: 1, x: 10 } : { opacity: 1, y: -10 }}
+          exit={direction === 'vertical' ? { opacity: 0, x: 0 } : { opacity: 0, y: 0 }}
           transition={{ duration: 0.2 }}
-          className={`dock-label ${className}`}
+          className={`dock-label dock-label-${direction} ${className}`}
           role="tooltip"
-          style={{ x: '-50%' }}
         >
           {children}
         </motion.div>
@@ -112,6 +116,7 @@ interface DockProps {
   panelHeight?: number;
   dockHeight?: number;
   baseItemSize?: number;
+  direction?: 'horizontal' | 'vertical';
 }
 
 export default function Dock({
@@ -122,31 +127,33 @@ export default function Dock({
   distance = 200,
   panelHeight = 68,
   dockHeight = 256,
-  baseItemSize = 50
+  baseItemSize = 50,
+  direction = 'horizontal'
 }: DockProps) {
-  const mouseX = useMotionValue(Infinity);
+  const isVertical = direction === 'vertical';
+  const mousePos = useMotionValue(Infinity);
   const isHovered = useMotionValue(0);
 
   const maxHeight = useMemo(
     () => Math.max(dockHeight, magnification + magnification / 2 + 4),
     [magnification, dockHeight]
   );
-  const heightRow = useTransform(isHovered, [0, 1], [panelHeight, maxHeight]);
-  const height = useSpring(heightRow, spring);
+  const sizeRow = useTransform(isHovered, [0, 1], [panelHeight, maxHeight]);
+  const size = useSpring(sizeRow, spring);
 
   return (
-    <motion.div style={{ height, scrollbarWidth: 'none' }} className="dock-outer">
+    <motion.div style={isVertical ? { width: size, scrollbarWidth: 'none' } : { height: size, scrollbarWidth: 'none' }} className={`dock-outer dock-outer-${direction}`}>
       <motion.div
-        onMouseMove={({ pageX }) => {
+        onMouseMove={({ pageX, pageY }) => {
           isHovered.set(1);
-          mouseX.set(pageX);
+          mousePos.set(isVertical ? pageY : pageX);
         }}
         onMouseLeave={() => {
           isHovered.set(0);
-          mouseX.set(Infinity);
+          mousePos.set(Infinity);
         }}
-        className={`dock-panel ${className}`}
-        style={{ height: panelHeight }}
+        className={`dock-panel dock-panel-${direction} ${className}`}
+        style={isVertical ? { width: panelHeight } : { height: panelHeight }}
         role="toolbar"
         aria-label="Application dock"
       >
@@ -155,15 +162,16 @@ export default function Dock({
             key={index}
             onClick={item.onClick}
             className={item.className}
-            mouseX={mouseX}
+            mousePos={mousePos}
             spring={spring}
             distance={distance}
             magnification={magnification}
             baseItemSize={baseItemSize}
             label={item.label}
+            direction={direction}
           >
             <DockIcon>{item.icon}</DockIcon>
-            <DockLabel>{item.label}</DockLabel>
+            <DockLabel direction={direction}>{item.label}</DockLabel>
           </DockItem>
         ))}
       </motion.div>
