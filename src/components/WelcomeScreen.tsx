@@ -17,11 +17,13 @@ export default function WelcomeScreen({ onEnter }: WelcomeScreenProps) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    const hour = new Date().getHours();
-    if (hour >= 5 && hour < 12) setGreeting("Good morning");
-    else if (hour >= 12 && hour < 15) setGreeting("Good afternoon");
-    else if (hour >= 15 && hour < 19) setGreeting("Good evening");
-    else setGreeting("Good night");
+    const now = new Date();
+    const witaDate = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Makassar" }));
+    const hour = witaDate.getHours();
+    
+    if (hour >= 0 && hour < 12) setGreeting("Good morning");
+    else if (hour >= 12 && hour < 18) setGreeting("Good afternoon");
+    else setGreeting("Good evening");
 
     audioRef.current = new Audio("/welcome-sound.mp3");
     return () => {

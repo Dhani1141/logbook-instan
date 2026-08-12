@@ -121,12 +121,11 @@ function HeaderClock() {
 
   if (!time) return null;
 
-  const hour = time.getHours();
+  const witaDate = new Date(time.toLocaleString("en-US", { timeZone: "Asia/Makassar" }));
+  const hour = witaDate.getHours();
   let greeting = 'Good Evening';
-  if (hour >= 5 && hour < 12) greeting = 'Good Morning';
-  else if (hour >= 12 && hour < 17) greeting = 'Good Afternoon';
-  else if (hour >= 17 && hour < 21) greeting = 'Good Evening';
-  else greeting = 'Good Night';
+  if (hour >= 0 && hour < 12) greeting = 'Good Morning';
+  else if (hour >= 12 && hour < 18) greeting = 'Good Afternoon';
 
   const timeString = time.toLocaleTimeString('id-ID', { 
     hour: '2-digit', 
