@@ -131,13 +131,14 @@ function HeaderClock() {
   const timeString = time.toLocaleTimeString('id-ID', { 
     hour: '2-digit', 
     minute: '2-digit', 
-    second: '2-digit' 
+    second: '2-digit',
+    timeZone: 'Asia/Makassar'
   }).replace(/\./g, ':');
 
   return (
     <div className="hidden md:flex flex-col items-end justify-center">
       <span className="text-sm font-bold text-indigo-200 tracking-wide">{greeting}</span>
-      <span className="text-[0.7rem] font-mono font-medium text-slate-400 tracking-widest mt-0.5">{timeString} WIB</span>
+      <span className="text-[0.7rem] font-mono font-medium text-slate-400 tracking-widest mt-0.5">{timeString} WITA</span>
     </div>
   );
 }
