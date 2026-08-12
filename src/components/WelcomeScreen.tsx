@@ -11,8 +11,7 @@ interface WelcomeScreenProps {
 }
 
 export default function WelcomeScreen({ onEnter }: WelcomeScreenProps) {
-  const [visible, setVisible] = useState(true);
-  const [fading, setFading] = useState(false);
+  const [stage, setStage] = useState<0 | 1 | 2>(0);
   const [textReady, setTextReady] = useState(false);
   const [greeting, setGreeting] = useState("");
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -25,9 +24,6 @@ export default function WelcomeScreen({ onEnter }: WelcomeScreenProps) {
     else setGreeting("Good night");
 
     audioRef.current = new Audio("/welcome-sound.mp3");
-    // Play the audio once the component mounts
-    audioRef.current.play().catch((err) => console.log("Audio autoplay prevented:", err));
-
     return () => {
       if (audioRef.current) {
         audioRef.current.pause();
@@ -36,33 +32,38 @@ export default function WelcomeScreen({ onEnter }: WelcomeScreenProps) {
     };
   }, []);
 
-  // Delay teks agar muncul setelah animasi ring mulai
-  useEffect(() => {
-    const t = setTimeout(() => setTextReady(true), 600);
-    return () => clearTimeout(t);
-  }, []);
-
-  const handleEnter = () => {
-    if (audioRef.current) {
-      audioRef.current.pause();
+  const handleInteraction = () => {
+    if (stage === 0) {
+      setStage(1);
+      if (audioRef.current) {
+        audioRef.current.play().catch((err) => console.log("Audio play error:", err));
+      }
+      setTimeout(() => setTextReady(true), 600);
+    } else if (stage === 1) {
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+      setStage(2);
+      setTimeout(() => {
+        onEnter();
+      }, 700);
     }
-    setFading(true);
-    setTimeout(() => {
-      setVisible(false);
-      onEnter();
-    }, 700);
   };
-
-  if (!visible) return null;
 
   return (
     <div
       className="welcome-screen"
-      style={{ opacity: fading ? 0 : 1 }}
-      onClick={handleEnter}
+      style={{ opacity: stage === 2 ? 0 : 1 }}
+      onClick={handleInteraction}
     >
-      {/* MagicRings — fullscreen WebGL canvas */}
-      <div className="welcome-rings">
+      {stage === 0 ? (
+        <div className="welcome-prestart">
+          <p className="welcome-hint prestart-text">Tap anywhere to start experience</p>
+        </div>
+      ) : (
+        <>
+          {/* MagicRings — fullscreen WebGL canvas */}
+          <div className="welcome-rings">
         <MagicRings
           color="#6366f1"
           colorTwo="#38bdf8"
@@ -93,8 +94,22 @@ export default function WelcomeScreen({ onEnter }: WelcomeScreenProps) {
         <p className="welcome-sub">Elkunyuk</p>
         <p className="welcome-hint">Tap / klik untuk mulai</p>
       </div>
+        </>
+      )}
 
       <style>{`
+        .welcome-prestart {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 100%;
+          width: 100%;
+        }
+        .prestart-text {
+          margin-top: 0;
+          font-size: 1.1rem;
+          color: rgba(148,163,184,0.65);
+        }
         .welcome-screen {
           position: fixed;
           inset: 0;
