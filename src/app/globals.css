@@ -95,3 +95,9 @@ select:focus {
   50%       { box-shadow: 0 0 0 10px rgba(37,99,235,0); }
 }
 .pulse-glow { animation: pulseGlow 2s ease infinite; }
+
+/* Fix native <select> dropdown option text readability */
+select option {
+  background-color: #1e293b;
+  color: #f1f5f9;
+}
