@@ -120,7 +120,7 @@ export default function Home() {
   const [showApp, setShowApp] = useState(false);
   const [currentView, setCurrentView] = useState<'logbook' | 'profile'>('logbook');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [hasPeeked, setHasPeeked] = useState(false);
+  const [peekState, setPeekState] = useState(0); // 0: hidden, 1: peeking, 2: done
   const [form, setForm]   = useState<FormState>(INITIAL);
 
   const [loading, setLoading] = useState(false);
@@ -149,8 +149,9 @@ export default function Home() {
 
   React.useEffect(() => {
     if (showApp) {
-      const timer = setTimeout(() => setHasPeeked(true), 2500);
-      return () => clearTimeout(timer);
+      const t1 = setTimeout(() => setPeekState(1), 800);
+      const t2 = setTimeout(() => setPeekState(2), 3500);
+      return () => { clearTimeout(t1); clearTimeout(t2); };
     }
   }, [showApp]);
 
@@ -569,7 +570,7 @@ export default function Home() {
 
           <div className={`fixed top-0 bottom-0 left-0 z-50 flex items-center transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]
             ${mobileMenuOpen ? "translate-x-0 opacity-100 pointer-events-auto" : "-translate-x-8 opacity-0 pointer-events-none"}
-            ${hasPeeked ? "md:-translate-x-8 md:opacity-0 md:pointer-events-none" : "md:translate-x-0 md:opacity-100 md:pointer-events-auto"}
+            ${peekState === 1 ? "md:translate-x-0 md:opacity-100 md:pointer-events-auto" : "md:-translate-x-8 md:opacity-0 md:pointer-events-none"}
             md:peer-hover:translate-x-0 md:peer-hover:opacity-100 md:peer-hover:pointer-events-auto
             md:hover:translate-x-0 md:hover:opacity-100 md:hover:pointer-events-auto
           `}>
