@@ -503,7 +503,7 @@ export default function Home() {
               onContactClick={() => window.open("https://wa.me/6285350607184", "_blank")}
             />
             <div className="card-glass rounded-3xl p-6 sm:p-8 flex flex-col justify-center text-left w-full lg:w-[450px]">
-              <h2 className="text-xl sm:text-2xl font-bold text-white mb-6 border-b border-indigo-500/20 pb-3">Informasi Tambahan</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-white mb-6 border-b border-indigo-500/20 pb-3">tentang Elkunyuk's</h2>
               
               <div className="space-y-5 text-sm">
                 <div>

@@ -50,9 +50,9 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
   enableMobileTilt = false,
   mobileTiltSensitivity = 5,
   miniAvatarUrl,
-  name = 'Muhammad Oktaviansyah Ramadhani',
+  name = "Elkunyuk's",
   title = 'Mahasiswa TI - Semester 7',
-  handle = '2311102441199',
+  handle = 'Nyuk.',
   status = 'Kelas B',
   contactText = 'Contact',
   showUserInfo = true,
@@ -363,7 +363,7 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
                       />
                     </div>
                     <div className="pc-user-text">
-                      <div className="pc-handle">@{handle}</div>
+                      <div className="pc-handle">{handle}</div>
                       <div className="pc-status">{status}</div>
                     </div>
                   </div>
