@@ -1,3 +1,4 @@
+"use client";
 // @ts-nocheck
 import { useEffect, useRef } from 'react';
 import { Renderer, Program, Mesh, Triangle } from 'ogl';
@@ -370,7 +371,8 @@ const WebThreads = ({
     mouseStrength
   ]);
 
-  return <div ref={containerRef} className={\`web-threads-container \${className}\`.trim()} />;
+  return <div ref={containerRef} className={`web-threads-container ${className}`.trim()} />;
 };
+
 
 export default WebThreads;
