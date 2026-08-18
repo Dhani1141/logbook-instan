@@ -9,6 +9,7 @@ import Dock from "@/components/Dock";
 import ProfileCard from "@/components/ProfileCard";
 
 const WebThreadsBg = dynamic(() => import("@/components/WebThreads"), { ssr: false });
+const SpecularButton = dynamic(() => import("@/components/SpecularButton"), { ssr: false });
 
 
 
@@ -540,31 +541,44 @@ export default function Home() {
           )}
 
           {/* ── Submit ── */}
-          <button type="submit" disabled={loading}
-            className="btn-ripple w-full py-4 rounded-2xl font-bold text-white text-base
-                       bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600
-                       shadow-lg shadow-blue-500/30
-                       transition-all duration-200
-                       hover:shadow-xl hover:shadow-blue-500/40 hover:-translate-y-0.5
-                       active:translate-y-0 active:shadow-md
-                       disabled:opacity-60 disabled:cursor-not-allowed disabled:translate-y-0
-                       pulse-glow"
-          >
-            {loading ? (
-              <span className="flex items-center justify-center gap-3">
-                <svg className="w-5 h-5 animate-spin-fast" viewBox="0 0 24 24" fill="none">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
-                  <path className="opacity-75" fill="currentColor"
-                    d="M4 12a8 8 0 018-8v4l3-3-3-3V4a10 10 0 100 20v-4l-3 3 3 3v-4a8 8 0 01-8-8z"/>
-                </svg>
-                Sedang Generate PDF...
-              </span>
-            ) : (
-              <span className="flex items-center justify-center gap-2">
-                <span>📄</span> Generate &amp; Download PDF
-              </span>
-            )}
-          </button>
+          <div className="w-full flex justify-center">
+            <SpecularButton
+              type="submit"
+              disabled={loading}
+              size="lg"
+              radius={24}
+              tint="#e40202"
+              tintOpacity={0}
+              blur={0}
+              textColor="#f5f5f5"
+              lineColor="#0082f2"
+              baseColor="#f5f5f5"
+              intensity={1.55}
+              shineSize={34}
+              shineFade={40}
+              thickness={2.7}
+              speed={0.35}
+              followMouse
+              proximity={250}
+              autoAnimate={false}
+              className="w-full"
+            >
+              {loading ? (
+                <span className="flex items-center justify-center gap-3">
+                  <svg className="w-5 h-5 animate-spin-fast" viewBox="0 0 24 24" fill="none">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                    <path className="opacity-75" fill="currentColor"
+                      d="M4 12a8 8 0 018-8v4l3-3-3-3V4a10 10 0 100 20v-4l-3 3 3 3v-4a8 8 0 01-8-8z"/>
+                  </svg>
+                  Sedang Generate PDF...
+                </span>
+              ) : (
+                <span className="flex items-center justify-center gap-2">
+                  <span>📄</span> Generate &amp; Download PDF
+                </span>
+              )}
+            </SpecularButton>
+          </div>
 
         </form>
 
