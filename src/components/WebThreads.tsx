@@ -1,5 +1,5 @@
-"use client";
 // @ts-nocheck
+"use client";
 import { useEffect, useRef } from 'react';
 import { Renderer, Program, Mesh, Triangle } from 'ogl';
 import './WebThreads.css';
@@ -10,7 +10,7 @@ const hexToRgb = (hex: string) => {
   return [parseInt(result[1], 16) / 255, parseInt(result[2], 16) / 255, parseInt(result[3], 16) / 255];
 };
 
-const FAN_MODE = { center: 0, left: 1, right: 2 };
+const FAN_MODE: Record<string, number> = { center: 0, left: 1, right: 2 };
 
 const vertex = `#version 300 es
 in vec2 position;
@@ -147,7 +147,7 @@ const WebThreads = ({
   mouseStrength = 0.3,
   className = ''
 }) => {
-  const containerRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const mouseRef = useRef({ enabled: true, strength: 0.3 });
 
   useEffect(() => {
