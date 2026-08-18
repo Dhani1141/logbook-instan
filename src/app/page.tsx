@@ -8,7 +8,7 @@ import { VscBook, VscAccount } from "react-icons/vsc";
 import Dock from "@/components/Dock";
 import ProfileCard from "@/components/ProfileCard";
 
-const LiquidEtherBg = dynamic(() => import("@/components/LiquidEther"), { ssr: false });
+const WebThreadsBg = dynamic(() => import("@/components/WebThreads"), { ssr: false });
 
 
 
@@ -336,7 +336,7 @@ export default function Home() {
       `}</style>
       {!showApp && <WelcomeScreen onEnter={() => setShowApp(true)} />}
 
-      {/* ── LiquidEther fullscreen background ── */}
+      {/* ── WebThreads fullscreen background ── */}
       <div
         aria-hidden="true"
         style={{
@@ -346,20 +346,28 @@ export default function Home() {
           background: "#050810",
         }}
       >
-        <LiquidEtherBg
-          colors={["#0f172a", "#312e81", "#4338ca", "#6366f1", "#38bdf8", "#0ea5e9"]}
-          mouseForce={22}
-          cursorSize={110}
-          resolution={0.45}
-          autoDemo={true}
-          autoSpeed={0.45}
-          autoIntensity={2.4}
-          autoResumeDelay={2000}
-          autoRampDuration={0.8}
-          BFECC={true}
-          isBounce={false}
-          isViscous={false}
-          style={{ width: "100%", height: "100%" }}
+        <WebThreadsBg
+          color1="#0039ff"
+          color2="#1b00ff"
+          color3="#00ddff"
+          speed={0.25}
+          threadCount={9}
+          frequency={6}
+          spread={0.17}
+          taper={1}
+          position={0.58}
+          fanMode="left"
+          glow={0.013}
+          falloff={0.6}
+          thickness={1.1}
+          brightness={0.6}
+          opacity={1}
+          mirror={false}
+          shimmer={false}
+          grain={false}
+          grainIntensity={0.03}
+          mouseInteraction={false}
+          mouseStrength={0.53}
         />
       </div>
 
