@@ -1,0 +1,280 @@
+:root {
+  --robot-body: #24262d;
+  --robot-dark: #121316;
+  --screen-bg: #05070a;
+  --glow-color: #38bdf8;
+  --anim-duration: 16s;
+}
+
+/* Overlay backdrop */
+.robot-loader-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(5, 8, 16, 0.82);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  animation: overlayFadeIn 0.3s ease both;
+}
+@keyframes overlayFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.robot-loader-overlay.closing {
+  animation: overlayFadeOut 0.3s ease both;
+}
+@keyframes overlayFadeOut {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+/* Status text */
+.robot-loader-text {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #38bdf8;
+  letter-spacing: 0.08em;
+  text-shadow: 0 0 12px #38bdf8;
+  animation: textPulse 1.8s ease-in-out infinite;
+}
+@keyframes textPulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+
+/* ── Scene ── */
+.rl-scene {
+  position: relative;
+  width: 300px;
+  height: 360px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding-bottom: 50px;
+}
+
+.rl-bench {
+  position: absolute;
+  bottom: 120px;
+  width: 250px;
+  height: 20px;
+  background: #333842;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+}
+.rl-bench::after {
+  content: '';
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 20px;
+  height: 100px;
+  background: #22252a;
+  border-radius: 5px;
+  box-shadow: 190px 0 0 #22252a;
+}
+
+/* ── Robot ── */
+.rl-robot {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  bottom: 50px;
+}
+
+.rl-head {
+  position: relative;
+  width: 100px;
+  height: 90px;
+  background: linear-gradient(145deg, #2f323b, var(--robot-dark));
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 8px 15px rgba(0,0,0,0.6);
+  transform-origin: bottom center;
+  animation: rl-headMovement var(--anim-duration) ease-in-out infinite;
+  z-index: 3;
+}
+
+.rl-screen {
+  width: 80px;
+  height: 60px;
+  background: var(--screen-bg);
+  border-radius: 12px;
+  box-shadow: inset 0 0 10px rgba(56, 189, 248, 0.1);
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.rl-face {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: rl-faceShift var(--anim-duration) ease-in-out infinite;
+}
+
+.rl-eye {
+  position: absolute;
+  background: var(--glow-color);
+  box-shadow: 0 0 8px var(--glow-color);
+  animation: rl-eyeBlink var(--anim-duration) infinite;
+}
+.rl-eye.left { left: 15px; }
+.rl-eye.right { right: 15px; }
+
+.rl-mouth {
+  position: absolute;
+  bottom: 12px;
+  background: var(--glow-color);
+  box-shadow: 0 0 8px var(--glow-color);
+  animation: rl-mouthChange var(--anim-duration) ease-in-out infinite;
+}
+
+.rl-zzz {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  color: var(--glow-color);
+  font-weight: bold;
+  font-size: 14px;
+  opacity: 0;
+  text-shadow: 0 0 5px var(--glow-color);
+  animation: rl-zzzSleep var(--anim-duration) ease-in-out infinite;
+}
+
+.rl-neck {
+  width: 25px;
+  height: 15px;
+  background: var(--robot-dark);
+  margin-top: -5px;
+  z-index: 2;
+}
+
+.rl-torso {
+  width: 60px;
+  height: 50px;
+  background: var(--robot-body);
+  border-radius: 10px 10px 15px 15px;
+  position: relative;
+  z-index: 2;
+  box-shadow: inset 0 5px 10px rgba(255,255,255,0.05);
+  animation: rl-torsoBreathe var(--anim-duration) ease-in-out infinite;
+}
+
+.rl-arm {
+  position: absolute;
+  top: 5px;
+  width: 16px;
+  height: 55px;
+  background: var(--robot-dark);
+  border-radius: 8px;
+  transform-origin: top center;
+}
+.rl-arm.left  { left: -20px;  animation: rl-leftArmMove  var(--anim-duration) ease-in-out infinite; }
+.rl-arm.right { right: -20px; animation: rl-rightArmMove var(--anim-duration) ease-in-out infinite; }
+
+.rl-leg {
+  position: absolute;
+  bottom: -45px;
+  width: 18px;
+  height: 55px;
+  background: var(--robot-dark);
+  border-radius: 8px;
+  transform-origin: top center;
+}
+.rl-leg.left  { left: 10px;  animation: rl-legSwingLeft  var(--anim-duration) ease-in-out infinite; }
+.rl-leg.right { right: 10px; animation: rl-legSwingRight var(--anim-duration) ease-in-out infinite; }
+
+/* ── Keyframes ── */
+@keyframes rl-headMovement {
+  0%,  10% { transform: rotate(0deg)   translateY(0); }
+  15%, 25% { transform: rotate(5deg)   translateY(-2px); }
+  30%, 40% { transform: rotate(-15deg) translateY(-5px); }
+  45%, 55% { transform: rotate(-5deg)  translateY(-8px); }
+  60%, 70% { transform: rotate(10deg)  translateY(5px); }
+  75%, 90% { transform: rotate(20deg)  translateY(15px); }
+  95%       { transform: rotate(-5deg)  translateY(-10px); }
+  100%      { transform: rotate(0deg)   translateY(0); }
+}
+@keyframes rl-faceShift {
+  0%,  10% { transform: translate(0, 0); }
+  15%, 25% { transform: translate(5px, -5px); }
+  30%, 40% { transform: translate(-5px, -8px); }
+  45%, 55% { transform: translate(0, -10px); }
+  60%, 70% { transform: translate(0, 8px); }
+  75%, 90% { transform: translate(0, 15px); }
+  100%      { transform: translate(0, 0); }
+}
+@keyframes rl-eyeBlink {
+  0%,  10% { width: 18px; height: 6px;  border-radius: 10px; top: 25px; }
+  15%, 25% { width: 16px; height: 16px; border-radius: 50%;  top: 20px; }
+  30%, 40% { width: 20px; height: 20px; border-radius: 50%;  top: 15px; }
+  45%, 55% { width: 18px; height: 5px;  border-radius: 10px 10px 0 0; top: 20px; }
+  60%, 70% { width: 18px; height: 8px;  border-radius: 10px; top: 28px; }
+  75%, 90% { width: 15px; height: 3px;  border-radius: 5px;  top: 35px; }
+  95%       { width: 22px; height: 22px; border-radius: 50%;  top: 15px; }
+  100%      { width: 18px; height: 6px;  border-radius: 10px; top: 25px; }
+}
+@keyframes rl-mouthChange {
+  0%,  10% { width: 12px; height: 4px;  border-radius: 0 0 10px 10px; bottom: 12px; }
+  15%, 25% { width: 14px; height: 4px;  border-radius: 0 0 10px 10px; bottom: 12px; }
+  30%, 40% { width: 10px; height: 10px; border-radius: 50%;  bottom: 15px; }
+  45%, 55% { width: 20px; height: 24px; border-radius: 50%;  bottom: 10px; }
+  60%, 70% { width: 12px; height: 4px;  border-radius: 0 0 10px 10px; bottom: 8px; }
+  75%, 90% { width: 8px;  height: 3px;  border-radius: 5px;  bottom: 5px; }
+  100%      { width: 12px; height: 4px;  border-radius: 0 0 10px 10px; bottom: 12px; }
+}
+@keyframes rl-leftArmMove {
+  0%,  10% { transform: rotate(10deg); }
+  15%, 25% { transform: rotate(15deg); }
+  30%, 40% { transform: rotate(-140deg); }
+  45%, 55% { transform: rotate(-160deg); }
+  60%, 90% { transform: rotate(5deg); }
+  100%      { transform: rotate(10deg); }
+}
+@keyframes rl-rightArmMove {
+  0%,  10% { transform: rotate(-10deg); }
+  15%, 25% { transform: rotate(-130deg); }
+  30%, 40% { transform: rotate(140deg); }
+  45%, 55% { transform: rotate(160deg); }
+  60%, 90% { transform: rotate(-5deg); }
+  100%      { transform: rotate(-10deg); }
+}
+@keyframes rl-legSwingLeft {
+  0%,  5% { transform: rotate(0deg); }
+  7%       { transform: rotate(15deg); }
+  10%      { transform: rotate(0deg); }
+  15%, 40% { transform: rotate(-5deg); }
+  45%, 55% { transform: rotate(-15deg); }
+  60%, 100%{ transform: rotate(0deg); }
+}
+@keyframes rl-legSwingRight {
+  0%,  15% { transform: rotate(0deg); }
+  30%, 40%  { transform: rotate(5deg); }
+  45%, 55%  { transform: rotate(15deg); }
+  60%, 100% { transform: rotate(0deg); }
+}
+@keyframes rl-torsoBreathe {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-2px); }
+}
+@keyframes rl-zzzSleep {
+  0%,  70% { opacity: 0; transform: translateY(0) scale(0.5); }
+  78%       { opacity: 1; transform: translateY(-10px) scale(1); }
+  85%       { opacity: 0; transform: translateY(-20px) scale(1.2); }
+  100%      { opacity: 0; }
+}

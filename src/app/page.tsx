@@ -10,6 +10,7 @@ import ProfileCard from "@/components/ProfileCard";
 
 const WebThreadsBg = dynamic(() => import("@/components/WebThreads"), { ssr: false });
 const SpecularButton = dynamic(() => import("@/components/SpecularButton"), { ssr: false });
+import RobotLoader from "@/components/RobotLoader";
 
 
 
@@ -661,6 +662,8 @@ export default function Home() {
           </div>
         </>
       )}
+      {/* Robot loading popup */}
+      {loading && <RobotLoader message="Sedang memproses logbook Anda..." />}
     </>
   );
 }
